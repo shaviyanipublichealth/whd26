@@ -858,7 +858,7 @@ newLogoImg.onload = () => { scheduleDraw(); };
 
         ctx.restore();
 
-        // 3. Top branding
+        // 3. Top branding with Soft White Glow on Logo
         ctx.save();
         const logoX = 45;
         const logoY = 24;
@@ -867,7 +867,18 @@ newLogoImg.onload = () => { scheduleDraw(); };
         if (newLogoImg.complete && newLogoImg.naturalHeight !== 0) {
           const lAspect = newLogoImg.width / newLogoImg.height;
           const logoWidth = logoTargetHeight * lAspect;
+
+          // Soft white glow effect
+          ctx.save();
+          ctx.shadowColor = '#ffffff';
+          ctx.shadowBlur = 20;
+          ctx.shadowOffsetX = 0;
+          ctx.shadowOffsetY = 0;
+
+          // Draw twice to make the glow rich and vibrant
           ctx.drawImage(newLogoImg, logoX, logoY, logoWidth, logoTargetHeight);
+          ctx.drawImage(newLogoImg, logoX, logoY, logoWidth, logoTargetHeight);
+          ctx.restore();
 
           const textStartX = logoX + logoWidth + 20;
           ctx.fillStyle = '#ffffff';
