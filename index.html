@@ -942,18 +942,32 @@
         // 6. ECG
         drawContinuousNormalEcg(elapsedTime);
 
-        // 7. Mascot with White Glow Effect
+        // 7. Mascot with Solid White Outline / Less Transparent Glow Effect
         if (mascotTrImg.complete && mascotTrImg.naturalHeight !== 0) {
           const targetHeight = 230;
           const aspect = mascotTrImg.width / mascotTrImg.height;
           const targetWidth = targetHeight * aspect;
           const mascotX = w - targetWidth - 20;
           const mascotY = h - targetHeight - 10;
+          
           ctx.save();
-          ctx.shadowColor = 'rgba(255, 255, 255, 0.85)';
-          ctx.shadowBlur = 18;
+          // Draw multiple solid offset layers behind to make the white outline look opaque
+          ctx.shadowColor = '#ffffff';
+          ctx.shadowBlur = 12;
           ctx.shadowOffsetX = 0;
           ctx.shadowOffsetY = 0;
+          
+          const offsets = [
+            {dx: -3, dy: 0}, {dx: 3, dy: 0}, {dx: 0, dy: -3}, {dx: 0, dy: 3},
+            {dx: -2, dy: -2}, {dx: 2, dy: 2}, {dx: -2, dy: 2}, {dx: 2, dy: -2}
+          ];
+          
+          offsets.forEach(offset => {
+            ctx.drawImage(mascotTrImg, mascotX + offset.dx, mascotY + offset.dy, targetWidth, targetHeight);
+          });
+
+          // Draw the final mascot on top cleanly
+          ctx.shadowBlur = 0;
           ctx.drawImage(mascotTrImg, mascotX, mascotY, targetWidth, targetHeight);
           ctx.restore();
         }
